@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--
+        PARENT: gives us Spring Boot's default plugin config and dependency versions.
+        Spring AI 2.x is built for Spring Boot 4.x. If Maven complains about an incompatible
+        version, generate a fresh project at https://start.spring.io (add the "Anthropic Claude" dependency),
+        look at the Boot + Spring AI versions it picks, and copy them here.
+    -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>4.0.0</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>com.example</groupId>
+    <artifactId>study-buddy</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>study-buddy</name>
+    <description>AI Study Buddy - a learning project for Spring AI</description>
+
+    <properties>
+        <java.version>17</java.version>
+        <!-- Spring AI version. Change this in ONE place when you upgrade. -->
+        <spring-ai.version>2.0.0</spring-ai.version>
+    </properties>
+
+    <dependencies>
+        <!-- Normal (blocking) REST endpoints: used by ChatClient .call() -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!--
+            Streaming (.stream()) returns a Flux, which is a reactive type. Spring AI's docs say
+            streaming goes through the reactive stack, so we include WebFlux to be safe. Our
+            controllers are still regular Spring MVC. (Harmless to keep.)
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+
+        <!--
+            The model provider: Anthropic (Claude). ONE starter only = Spring creates exactly one
+            ChatModel bean, so the auto-configured ChatClient.Builder is unambiguous.
+            To use another provider, swap this starter and change application.yml.
+        -->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-starter-model-anthropic</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <!-- The BOM keeps every Spring AI artifact on the same version, so we never write versions on them. -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-bom</artifactId>
+                <version>${spring-ai.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>

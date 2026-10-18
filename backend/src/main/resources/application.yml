@@ -1,0 +1,27 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: study-buddy
+  ai:
+    anthropic:
+      # NEVER type your real key into this file (it would end up in git / zips).
+      # ${ANTHROPIC_API_KEY} means "read it from the environment variable ANTHROPIC_API_KEY".
+      # In IntelliJ you set that variable in the Run Configuration (see README).
+      api-key: ${ANTHROPIC_API_KEY}
+      chat:
+        # Claude model to use. claude-haiku-5-5 is fast and cheap, good for learning.
+        # For better answers try claude-sonnet-5-5.
+        model: claude-haiku-5-5
+        # Anthropic requires a limit on the answer length. 2000 tokens is roughly 1500 words,
+        # enough for an explanation. Larger = longer possible answers = more cost.
+        max-tokens: 2000
+        # Do NOT set temperature here. Newer Claude models (such as claude-haiku-5-5) reject it with
+        # HTTP 400 "`temperature` is deprecated for this model". Older models accept 0 to 1.
+
+logging:
+  level:
+    # DEBUG on this package makes SimpleLoggerAdvisor print the FULL prompt sent to the model,
+    # including the old messages that the memory advisor added. Great for learning how memory works.
+    org.springframework.ai.chat.client.advisor: DEBUG

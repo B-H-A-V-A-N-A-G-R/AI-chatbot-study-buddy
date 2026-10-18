@@ -1,0 +1,13 @@
+# IntelliJ (workspace.xml holds your ANTHROPIC_API_KEY, never commit it)
+.idea/
+*.iml
+.vscode/
+
+# Build output and dependencies
+target/
+node_modules/
+dist/
+
+# Secrets
+.env
+.env.*
